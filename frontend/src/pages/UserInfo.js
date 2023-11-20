@@ -2,7 +2,7 @@
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import useUserStore from '../zustand/usersStore';
 import { useEffect, useState } from 'react';
-import { FiCalendar, FiMapPin } from 'react-icons/fi';
+import { FiCalendar } from 'react-icons/fi';
 import CardQuestion from '../components/QuestionCard';
 import QuestionRecap from '../components/Recaps/Question/Question';
 import AnswerRecap from '../components/Recaps/Answer/Answer';
@@ -66,14 +66,17 @@ const UserInfo = () => {
 
   const fetchFollow = async () => {
     const user = JSON.parse(localStorage.getItem('user'));
-    const result = await fetch(process.env.REACT_APP_API_HOST + '/api/users/check-follow', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        follower_id: id,
-        following_id: user.data.user_id,
-      }),
-    });
+    const result = await fetch(
+      process.env.REACT_APP_API_HOST + '/api/users/check-follow',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          follower_id: id,
+          following_id: user.data.user_id,
+        }),
+      }
+    );
     const response = await result.json();
 
     setFollow(response.statusFollow);
@@ -130,7 +133,12 @@ const UserInfo = () => {
           >
             <div>
               <img
-                src={userinfo.Profile && userinfo.Profile.profile_picture ? 'http://localhost:3000/' + userinfo.Profile.profile_picture : 'https://atmos.ucla.edu/wp-content/themes/aos-child-theme/images/generic-avatar.png'}
+                src={
+                  userinfo.Profile && userinfo.Profile.profile_picture
+                    ? 'http://localhost:3000/' +
+                      userinfo.Profile.profile_picture
+                    : 'https://atmos.ucla.edu/wp-content/themes/aos-child-theme/images/generic-avatar.png'
+                }
                 style={{
                   width: '200px',
                   borderRadius: '10%',
@@ -322,7 +330,15 @@ const UserInfo = () => {
                   fontSize: '16px',
                 }}
               >
-                {userinfo.Profile ? userinfo.Profile.about_me ? userinfo.Profile.about_me : <h4>Biodata not found</h4> : <h4>Biodata not found</h4>}
+                {userinfo.Profile ? (
+                  userinfo.Profile.about_me ? (
+                    userinfo.Profile.about_me
+                  ) : (
+                    <h4>Biodata not found</h4>
+                  )
+                ) : (
+                  <h4>Biodata not found</h4>
+                )}
               </div>
             </div>
 
@@ -357,7 +373,15 @@ const UserInfo = () => {
                             fontSize: '14px',
                           }}
                         >
-                          {userinfo.Questions && userinfo.Questions.length === 0 ? <p className='mt-3'>No data avaible yet</p> : userinfo.Questions && userinfo.Questions.map((data, index) => <CardQuestion key={index} question={data} />)}
+                          {userinfo.Questions &&
+                          userinfo.Questions.length === 0 ? (
+                            <p className='mt-3'>No data avaible yet</p>
+                          ) : (
+                            userinfo.Questions &&
+                            userinfo.Questions.map((data, index) => (
+                              <CardQuestion key={index} question={data} />
+                            ))
+                          )}
                         </div>
                       </div>
                     </div>
@@ -390,7 +414,7 @@ const UserInfo = () => {
                             </p>
                           ) : (
                             userinfo.answers &&
-                            userinfo.answers.map(answer => (
+                            userinfo.answers.map((answer) => (
                               <div key={answer.id}>
                                 <CardAnswer answer={answer} />
                               </div>
@@ -433,7 +457,12 @@ const UserInfo = () => {
                             }}
                           >
                             <img
-                              src={item.Profile && item.Profile.profile_picture ? 'http://localhost:3000/' + item.Profile.profile_picture : 'https://atmos.ucla.edu/wp-content/themes/aos-child-theme/images/generic-avatar.png'}
+                              src={
+                                item.Profile && item.Profile.profile_picture
+                                  ? 'http://localhost:3000/' +
+                                    item.Profile.profile_picture
+                                  : 'https://atmos.ucla.edu/wp-content/themes/aos-child-theme/images/generic-avatar.png'
+                              }
                               style={{
                                 width: '50px',
                                 height: '50px',
@@ -442,7 +471,9 @@ const UserInfo = () => {
                               alt=''
                             />
                             <div>
-                              <p className='text-center mt-3 fw-bold'>{item.name}</p>
+                              <p className='text-center mt-3 fw-bold'>
+                                {item.name}
+                              </p>
                             </div>
                           </div>
                         </div>

@@ -5,7 +5,17 @@ import useTagStore from '../zustand/tagStore';
 const Tag = () => {
   // const [data, setData] = useState();
   // const [isLoading, setIsLoading] = useState(false);
-  const { data, isLoading, filterData, fetchData, countPage, page, row, setPage, setCountPage } = useTagStore();
+  const {
+    data,
+    isLoading,
+    filterData,
+    fetchData,
+    countPage,
+    page,
+    row,
+    setPage,
+    setCountPage,
+  } = useTagStore();
   const handleUp = () => {
     const total = page + 1;
     if (total <= countPage) {
@@ -13,7 +23,7 @@ const Tag = () => {
     }
   };
 
-  const handlePage = page => {
+  const handlePage = (page) => {
     setPage(page);
   };
 
@@ -24,13 +34,14 @@ const Tag = () => {
     }
   };
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setCountPage(e.target.value);
     setPage(1);
   };
 
   useEffect(() => {
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -49,10 +60,18 @@ const Tag = () => {
           </select>
         </div>
         <div class='btn-group' role='group'>
-          <button type='button' class='btn btn-light ms-1 card' onClick={() => filterData('tag_new')}>
+          <button
+            type='button'
+            class='btn btn-light ms-1 card'
+            onClick={() => filterData('tag_new')}
+          >
             New
           </button>
-          <button type='button' class='btn btn-light ms-1 card' onClick={() => filterData('tag_long')}>
+          <button
+            type='button'
+            class='btn btn-light ms-1 card'
+            onClick={() => filterData('tag_long')}
+          >
             Long
           </button>
         </div>
@@ -68,8 +87,10 @@ const Tag = () => {
       <div className='row mt-4'>
         {data &&
           data
-            .filter((_, index) => index >= page * row - row && index < page * row)
-            .map(d => (
+            .filter(
+              (_, index) => index >= page * row - row && index < page * row
+            )
+            .map((d) => (
               <div className='col-md-6 mb-3'>
                 <div className='card'>
                   <div className='card-body'>
@@ -88,7 +109,9 @@ const Tag = () => {
                         fontSize: '14px',
                       }}
                     >
-                      {d.body.length > 100 ? d.body.substring(0, 90) + '...' : d.body}
+                      {d.body.length > 100
+                        ? d.body.substring(0, 90) + '...'
+                        : d.body}
                     </p>
                   </div>
                 </div>
@@ -97,15 +120,33 @@ const Tag = () => {
       </div>
 
       <div className='d-flex gap-1'>
-        <div className='bg-white py-3 p-4 rounded' style={{ cursor: 'pointer' }} onClick={handleDown}>
+        <div
+          className='bg-white py-3 p-4 rounded'
+          style={{ cursor: 'pointer' }}
+          onClick={handleDown}
+        >
           {'<'}
         </div>
-        {Array.from({ length: countPage !== 0 ? countPage : 1 }, (_, index) => index + 1).map((_, index) => (
-          <div key={index} className={`${index + 1 === page ? 'bg-primary text-white' : 'bg-white'} py-3 p-4 rounded`} style={{ cursor: 'pointer' }} onClick={() => handlePage(index + 1)}>
+        {Array.from(
+          { length: countPage !== 0 ? countPage : 1 },
+          (_, index) => index + 1
+        ).map((_, index) => (
+          <div
+            key={index}
+            className={`${
+              index + 1 === page ? 'bg-primary text-white' : 'bg-white'
+            } py-3 p-4 rounded`}
+            style={{ cursor: 'pointer' }}
+            onClick={() => handlePage(index + 1)}
+          >
             {index + 1}
           </div>
         ))}
-        <div className='bg-white py-3 p-4 rounded' style={{ cursor: 'pointer' }} onClick={handleUp}>
+        <div
+          className='bg-white py-3 p-4 rounded'
+          style={{ cursor: 'pointer' }}
+          onClick={handleUp}
+        >
           {'>'}
         </div>
       </div>

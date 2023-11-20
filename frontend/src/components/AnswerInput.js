@@ -14,10 +14,11 @@ const AnswerInput = () => {
   const [success, setSuccess] = useState(false);
   const { id } = useParams();
 
-  const { postAnswer, loadingAnswer, clearAnswer, updateAnswer } = useAnswerStore();
+  const { postAnswer, loadingAnswer, clearAnswer, updateAnswer } =
+    useAnswerStore();
   const { isLogin } = useAuthStore();
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (isLogin) {
       if (location.pathname.includes('editanswer')) {
@@ -34,21 +35,38 @@ const AnswerInput = () => {
 
   useEffect(() => {
     return () => clearAnswer();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div>
       <div className='card'>
         <div className='card-body px-5'>
-          {success === true ? location.pathname.includes('editanswer') ? <div className='alert alert-success'>Succesfully update your Answer</div> : <div className='alert alert-success'>Succesfully send your answer</div> : ''}
-          {loggedIn === false ? <div className='alert alert-warning'>Please login first!</div> : ''}
-          <form className='formQuestion' onSubmit={e => handleSubmit(e)}>
+          {success === true ? (
+            location.pathname.includes('editanswer') ? (
+              <div className='alert alert-success'>
+                Succesfully update your Answer
+              </div>
+            ) : (
+              <div className='alert alert-success'>
+                Succesfully send your answer
+              </div>
+            )
+          ) : (
+            ''
+          )}
+          {loggedIn === false ? (
+            <div className='alert alert-warning'>Please login first!</div>
+          ) : (
+            ''
+          )}
+          <form className='formQuestion' onSubmit={(e) => handleSubmit(e)}>
             <label htmlFor='' className='my-3'>
               Send your Answer
             </label>
             <ReactQuill
               value={body}
-              onChange={value => setBody(value)}
+              onChange={(value) => setBody(value)}
               modules={{
                 toolbar: [
                   [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
@@ -60,7 +78,15 @@ const AnswerInput = () => {
                   [{ list: 'ordered' }, { list: 'bullet' }],
                   [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
                   [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
-                  [{ align: 'justify' }, { align: '' }, { align: 'center' }, { align: 'right' }, { direction: 'rtl' }, { color: [] }, { background: [] }], // text direction // dropdown with defaults from theme
+                  [
+                    { align: 'justify' },
+                    { align: '' },
+                    { align: 'center' },
+                    { align: 'right' },
+                    { direction: 'rtl' },
+                    { color: [] },
+                    { background: [] },
+                  ], // text direction // dropdown with defaults from theme
                   ['link', 'image', 'video'],
                 ],
               }}

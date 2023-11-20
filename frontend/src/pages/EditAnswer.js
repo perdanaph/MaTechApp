@@ -1,8 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import DetailData from '../components/DetailData';
 import AnswerInput from '../components/AnswerInput';
-import DetailAnswer from '../components/DetailAnswer';
 import useAnswerStore from '../zustand/answerStore';
 
 const EditAnswer = () => {
@@ -29,7 +28,9 @@ const EditAnswer = () => {
     <div className='px-1'>
       <div id='question' className='w-100'>
         <div className='pb-2' style={{ backgroundColor: '#ffffff' }}>
-          {dataQuestion.question && <DetailData question={dataQuestion.question} />}
+          {dataQuestion.question && (
+            <DetailData question={dataQuestion.question} />
+          )}
         </div>
         <AnswerInput />
       </div>
