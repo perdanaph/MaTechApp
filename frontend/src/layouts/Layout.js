@@ -47,7 +47,7 @@ export default function Layout({ children }) {
     );
   }
 
-  if (['/auth'].includes(location.pathname) || location.pathname.includes('/forgot-password')) {
+  if (['/auth'].includes(location.pathname) || location.pathname.includes('/forgot-password') || location.pathname.includes('/kuesioner')) {
     return (
       <>
         <main>{children}</main>
@@ -107,7 +107,7 @@ export default function Layout({ children }) {
                 marginBottom: '10px',
               }}
             >
-              Mathec @2023
+              Matech @2023
             </div>
           </div>
         </footer>

@@ -17,6 +17,7 @@ import EditQuestion from './pages/EditQuestion';
 import Reset from './pages/Reset';
 import ChanePassword from './pages/ChangePassword';
 import EditAnswer from './pages/EditAnswer';
+import Quesioner from './pages/Quesioner';
 
 const App = () => {
   return (
@@ -40,6 +41,7 @@ const App = () => {
           <Route path='/editprofile' element={<EditProfile />}></Route>
           <Route path='/saved' element={<Saved />}></Route>
           <Route path='/editanswer/:id' element={<EditAnswer />}></Route>
+          <Route path='/kuesioner' element={<Quesioner />}></Route>
         </Routes>
       </div>
     </Layout>
