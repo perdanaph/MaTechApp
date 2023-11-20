@@ -2506,3 +2506,11 @@ a {
 ::-webkit-scrollbar-track {
   background-color: #f1f1f1;
 }
+
+.likertLegend {
+  margin-bottom: 2rem;
+}
+
+.likertScale {
+  display: block !important;
+}

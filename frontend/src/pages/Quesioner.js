@@ -1,19 +1,33 @@
+import { useEffect, useState } from 'react';
 import Likert from 'react-likert-scale';
 
 export default function Quesioner() {
-  const linkertOptions = {
-    question: 'Sejauh mana penggunaan forum diskusi membantu Anda menjadi lebih efektif dalam kegiatan sehari-hari?',
-    responses: [
-      { value: 1, text: 'Sangat Setuju' },
-      { value: 2, text: 'Setuju' },
-      { value: 3, text: 'Ragu-ragu', checked: true },
-      { value: 4, text: 'Tidak Setuju' },
-      { value: 5, text: 'Sangat Tidak Setuju' },
-    ],
-    onChange: val => {
-      console.log(val);
-    },
-  };
+  const [data, setData] = useState([]);
+  const [dataSubmit, setDataSubmit] = useState([]);
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  async function getKuesioner() {
+    const response = await fetch(process.env.REACT_APP_API_HOST + '/api/questioner');
+    const json = await response.json();
+    setData(json.data);
+
+    let dataScore = [];
+
+    json.data.forEach(element => {
+      element.Questioners.forEach(item => {
+        dataScore.push({
+          id_user: user.data.user_id,
+          id_questioner: item.id,
+          score: 0,
+        });
+      });
+    });
+    setDataSubmit(dataScore);
+  }
+
+  useEffect(() => {
+    getKuesioner();
+  }, []);
 
   return (
     <div className='container mt-5'>
@@ -36,13 +50,51 @@ export default function Quesioner() {
             </div>
           </div>
 
-          <div className='container justify-content-center'>
-            <div className='col-lg-10 text-center col-sm-12'>
-              <div className='card'>
-                <div className='card-body m-1'>
-                  <Likert {...linkertOptions} />
-                </div>
-              </div>
+          <div className='container p-3'>
+            <div className='row justify-content-center  gap-2'>
+              {data.map((item, index) => {
+                return (
+                  <div className='col-lg-10 text-center col-sm-12'>
+                    <div className='card'>
+                      <div className='card-header text-start'>
+                        <div className='card-title'>{item.name}</div>
+                      </div>
+                      <div className='card-body m-1'>
+                        {item.Questioners.map(kuesioner => {
+                          return (
+                            <Likert
+                              question={kuesioner.questioner}
+                              responses={[
+                                { value: 1, text: 'Sangat Setuju', id_questioner: kuesioner.id },
+                                { value: 2, text: 'Setuju', id_questioner: kuesioner.id },
+                                { value: 3, text: 'Ragu-ragu', id_questioner: kuesioner.id },
+                                { value: 4, text: 'Tidak Setuju', id_questioner: kuesioner.id },
+                                { value: 5, text: 'Sangat Tidak Setuju', id_questioner: kuesioner.id },
+                              ]}
+                              style={{ marginBottom: '6rem' }}
+                              onChange={val => {
+                                setDataSubmit(prevState => {
+                                  let nextState = prevState.map(item => {
+                                    if (item.id_questioner === val.id_questioner) {
+                                      return {
+                                        id_user: user.data.user_id,
+                                        id_questioner: item.id_questioner,
+                                        score: val.value,
+                                      };
+                                    }
+                                    return item;
+                                  });
+                                  return nextState;
+                                });
+                              }}
+                            />
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

@@ -53,14 +53,16 @@ class QuestionerController {
       });
 
       if (!userResponseLinkert) {
-        return res.status(404).json({
-          success: false,
+        return res.status(200).json({
+          success: true,
+          isResponden: false,
           status: 'Success',
           message: 'User belum pernah mengisi kuesioner',
         });
       }
       return res.status(200).json({
         success: true,
+        isResponden: true,
         status: 'success',
         message: 'User sudah pernah mengisi kuesioner',
       });
