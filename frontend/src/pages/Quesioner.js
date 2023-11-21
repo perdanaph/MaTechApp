@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
 import Likert from 'react-likert-scale';
+import { useNavigate } from 'react-router-dom';
 
 export default function Quesioner() {
+  const navigate = useNavigate();
   const [data, setData] = useState([]);
   const [dataSubmit, setDataSubmit] = useState([]);
   const user = JSON.parse(localStorage.getItem('user'));
@@ -25,8 +27,35 @@ export default function Quesioner() {
     setDataSubmit(dataScore);
   }
 
+  async function checkResponden() {
+    const checkResponden = await fetch(process.env.REACT_APP_API_HOST + '/api/questioner/check/' + user.data.user_id);
+    const responseJson = await checkResponden.json();
+    if (responseJson.isResponden) {
+      navigate('/');
+    }
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    const checkInput = dataSubmit.filter(item => item.score === 0);
+    if (checkInput.length !== 0) {
+      alert('Semua kuesioner harus dijawab');
+    } else {
+      await fetch(process.env.REACT_APP_API_HOST + '/api/questioner', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ questioner: dataSubmit }),
+      });
+      alert('Terima kasih telah melakukan pengisian kuesioner');
+      navigate('/');
+    }
+  }
+
   useEffect(() => {
     getKuesioner();
+    checkResponden();
   }, []);
 
   return (
@@ -51,7 +80,7 @@ export default function Quesioner() {
           </div>
 
           <div className='container p-3'>
-            <div className='row justify-content-center  gap-2'>
+            <form className='row justify-content-center  gap-2' onSubmit={handleSubmit}>
               {data.map((item, index) => {
                 return (
                   <div className='col-lg-10 text-center col-sm-12'>
@@ -95,7 +124,10 @@ export default function Quesioner() {
                   </div>
                 );
               })}
-            </div>
+              <div className='col-lg-10 text-center d-flex flex-column mt-3 col-sm-12'>
+                <button className='btn btn-primary'>Submit</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

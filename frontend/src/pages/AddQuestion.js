@@ -1,11 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'quill/dist/quill.snow.css';
 import TagsInput from 'react-tagsinput';
 import 'react-tagsinput/react-tagsinput.css';
 import { Link, useNavigate } from 'react-router-dom';
 import useAuthStore from '../zustand/authStore';
-import { Modal, Button } from 'bootstrap';
 
 const AddQuestion = () => {
   const [title, setTitle] = useState('');
@@ -54,6 +53,13 @@ const AddQuestion = () => {
       setError('Please Login first!');
     }
   };
+
+  useEffect(() => {
+    if (openModal) {
+      const modal = document.getElementById('exampleModal');
+      modal.classList.add('show');
+    }
+  }, [openModal]);
 
   return (
     <>
@@ -116,7 +122,7 @@ const AddQuestion = () => {
           </div>
         </div>
       </div>
-      <div className={`modal fade ${openModal ? 'show' : ''}`} style={{ display: openModal ? 'block' : 'none' }} id='exampleModal' tabIndex={-1} aria-labelledby='exampleModalLabel' aria-hidden='true'>
+      <div className={`modal fade`} style={{ display: openModal ? 'block' : 'none' }} id='exampleModal' tabIndex={-1} aria-labelledby='exampleModalLabel' aria-hidden='true'>
         <div className='modal-dialog'>
           <div className='modal-content'>
             <div className='modal-header'>

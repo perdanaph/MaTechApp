@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import ReactQuill from 'react-quill';
 import 'quill/dist/quill.snow.css';
 import 'react-tagsinput/react-tagsinput.css';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import useAnswerStore from '../zustand/answerStore';
 import useAuthStore from '../zustand/authStore';
 
@@ -12,13 +12,16 @@ const AnswerInput = () => {
   const [body, setBody] = useState(dataAnswer == null ? '' : dataAnswer.body);
   const [loggedIn, setLoggedIn] = useState(true);
   const [success, setSuccess] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
   const { id } = useParams();
 
-  const { postAnswer, loadingAnswer, clearAnswer, updateAnswer } =
-    useAnswerStore();
+  const { postAnswer, loadingAnswer, clearAnswer, updateAnswer } = useAnswerStore();
   const { isLogin } = useAuthStore();
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const user = JSON.parse(localStorage.getItem('user'));
+
+  const handleSubmit = async e => {
     e.preventDefault();
     if (isLogin) {
       if (location.pathname.includes('editanswer')) {
@@ -26,6 +29,12 @@ const AnswerInput = () => {
       } else {
         await postAnswer(id, body);
         setBody('');
+        const checkResponden = await fetch(process.env.REACT_APP_API_HOST + '/api/questioner/check/' + user.data.user_id);
+        const responseJson = await checkResponden.json();
+        if (!responseJson.isResponden) {
+          setSuccess(true);
+          setOpenModal(true);
+        }
       }
       setSuccess(true);
     } else {
@@ -38,35 +47,26 @@ const AnswerInput = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    if (openModal) {
+      const modal = document.getElementById('exampleModal');
+      modal.classList.add('show');
+    }
+  }, [openModal]);
+
   return (
     <div>
       <div className='card'>
         <div className='card-body px-5'>
-          {success === true ? (
-            location.pathname.includes('editanswer') ? (
-              <div className='alert alert-success'>
-                Succesfully update your Answer
-              </div>
-            ) : (
-              <div className='alert alert-success'>
-                Succesfully send your answer
-              </div>
-            )
-          ) : (
-            ''
-          )}
-          {loggedIn === false ? (
-            <div className='alert alert-warning'>Please login first!</div>
-          ) : (
-            ''
-          )}
-          <form className='formQuestion' onSubmit={(e) => handleSubmit(e)}>
+          {success === true ? location.pathname.includes('editanswer') ? <div className='alert alert-success'>Succesfully update your Answer</div> : <div className='alert alert-success'>Succesfully send your answer</div> : ''}
+          {loggedIn === false ? <div className='alert alert-warning'>Please login first!</div> : ''}
+          <form className='formQuestion' onSubmit={e => handleSubmit(e)}>
             <label htmlFor='' className='my-3'>
               Send your Answer
             </label>
             <ReactQuill
               value={body}
-              onChange={(value) => setBody(value)}
+              onChange={value => setBody(value)}
               modules={{
                 toolbar: [
                   [{ size: ['small', false, 'large', 'huge'] }], // custom dropdown
@@ -78,15 +78,7 @@ const AnswerInput = () => {
                   [{ list: 'ordered' }, { list: 'bullet' }],
                   [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
                   [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
-                  [
-                    { align: 'justify' },
-                    { align: '' },
-                    { align: 'center' },
-                    { align: 'right' },
-                    { direction: 'rtl' },
-                    { color: [] },
-                    { background: [] },
-                  ], // text direction // dropdown with defaults from theme
+                  [{ align: 'justify' }, { align: '' }, { align: 'center' }, { align: 'right' }, { direction: 'rtl' }, { color: [] }, { background: [] }], // text direction // dropdown with defaults from theme
                   ['link', 'image', 'video'],
                 ],
               }}
@@ -112,6 +104,40 @@ const AnswerInput = () => {
               </div>
             </button>
           </form>
+        </div>
+      </div>
+      <div className={`modal fade`} style={{ display: openModal ? 'block' : 'none' }} id='exampleModal' tabIndex={-1} aria-labelledby='exampleModalLabel' aria-hidden='true'>
+        <div className='modal-dialog'>
+          <div className='modal-content'>
+            <div className='modal-header'>
+              <h1 className='modal-title fs-5' id='exampleModalLabel'>
+                Kuesioner
+              </h1>
+              <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close' />
+            </div>
+            <div className='modal-body'>Halo {user.data.name} apakah anda bersedia mengisi kuesioner untuk website kami?</div>
+            <div className='modal-footer'>
+              <button
+                type='button'
+                className='btn btn-danger'
+                data-bs-dismiss='modal'
+                onClick={() => {
+                  setOpenModal(false);
+                }}
+              >
+                Tidak
+              </button>
+              <button
+                type='button'
+                className='btn btn-success'
+                onClick={() => {
+                  navigate('/kuesioner');
+                }}
+              >
+                Bersedia
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

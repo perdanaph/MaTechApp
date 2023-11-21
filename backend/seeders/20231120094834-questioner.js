@@ -23,7 +23,6 @@ module.exports = {
         data: [
           'Bagaimana tingkat kesulitan penggunaan forum diskusi menurut Anda?',
           'Apakah forum diskusi mudah digunakan menurut pengalaman Anda?',
-          'Sejauh mana kemudahan penggunaan forum diskusi memengaruhi kepuasan Anda?',
           'Seberapa mudah Anda menemukan forum diskusi ini dan mulai berpartisipasi?',
           'Menurut Anda, bagaimana tingkat kesulitan penggunaan forum diskusi ?',
           'Sejauh mana Anda merasa nyaman dan mudah menggunakan forum diskusi?',
@@ -75,7 +74,7 @@ module.exports = {
 
     let questioner = [];
     seedData.forEach((seed, index) => {
-      seed.data.forEach(async (element) => {
+      seed.data.forEach(async element => {
         questioner.push({
           questioner: element,
           id_category_questioner: index + 1,
