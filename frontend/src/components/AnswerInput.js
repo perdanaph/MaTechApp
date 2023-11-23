@@ -115,7 +115,7 @@ const AnswerInput = () => {
               </h1>
               <button type='button' className='btn-close' data-bs-dismiss='modal' aria-label='Close' />
             </div>
-            <div className='modal-body'>Halo {user.data.name} apakah anda bersedia mengisi kuesioner untuk website kami?</div>
+            <div className='modal-body'>Halo {user && user.data.name} apakah anda bersedia mengisi kuesioner untuk website kami?</div>
             <div className='modal-footer'>
               <button
                 type='button'

@@ -271,6 +271,9 @@ class HomeController {
               {
                 model: QuestionAnswer,
               },
+              {
+                model: UserAction,
+              },
             ],
             order: orderClause,
             where: whereClause,
@@ -283,17 +286,20 @@ class HomeController {
               profile_picture: d.User.Profile.profile_picture,
               title: d.title,
               body: $.text(),
-              tags: d.tag.map(t => {
-                return {
-                  tag_name: t.tag_name,
-                };
-              }),
+              tags: d.tag
+                .map(t => {
+                  return {
+                    tag_name: t.tag_name,
+                  };
+                })
+                .sort((a, b) => a.tag_name.localeCompare(b.tag_name)),
               like: d.like,
               dislike: d.dislike,
               answer_total: d.QuestionAnswers.length,
               viewer_total: d.view_count,
               vote_count: d.vote_count,
               posted_at: d.createdAt,
+              action: d.UserActions,
             };
           });
 
@@ -392,6 +398,9 @@ class HomeController {
         {
           model: QuestionAnswer,
         },
+        {
+          model: UserAction,
+        },
       ],
       where: {
         createdAt: {
@@ -408,17 +417,20 @@ class HomeController {
         profile_picture: d.User.Profile.profile_picture,
         title: d.title,
         body: $.text(),
-        tags: d.tag.map(t => {
-          return {
-            tag_name: t.tag_name,
-          };
-        }),
+        tags: d.tag
+          .map(t => {
+            return {
+              tag_name: t.tag_name,
+            };
+          })
+          .sort((a, b) => a.tag_name.localeCompare(b.tag_name)),
         like: d.like,
         dislike: d.dislike,
         answer_total: d.QuestionAnswers.length,
         viewer_total: d.view_count,
         vote_count: d.vote_count,
         posted_at: d.createdAt,
+        action: d.UserActions,
       };
     });
 

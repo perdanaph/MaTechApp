@@ -164,24 +164,11 @@ const useSaveStore = create(set => ({
         throw new Error('Network response was not ok');
       }
       const json = await response.json();
-      set(state => ({
-        data: state.data.map(item => {
-          const filter = json.data.filter(item => item.question_id === question.question_id);
-
-          if (item.question_id === question.question_id) {
-            if (filter.length === 0) {
-              item.vote_count--;
-              return item;
-            } else {
-              item.vote_count++;
-              return item;
-            }
-          }
-          return item;
-        }),
+      set({
+        data: json.data,
         loadingLike: false,
         actionId: null,
-      }));
+      });
     }
     set({
       loadingLike: false,

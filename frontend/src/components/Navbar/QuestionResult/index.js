@@ -1,11 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 
 export default function QuestionResult({ questions, close }) {
-  const navigate = useNavigate()
-  const navigation = (item) => {
+  const navigate = useNavigate();
+  const navigation = item => {
     navigate('/detailquestion/' + item.id);
-    close()
-  }
+    close();
+  };
   return (
     <div>
       <h6
@@ -28,7 +28,7 @@ export default function QuestionResult({ questions, close }) {
             style={{
               textDecoration: 'none',
               color: 'black',
-              cursor: "pointer"
+              cursor: 'pointer',
             }}
             key={index}
             onClick={() => navigation(item)}
@@ -40,15 +40,6 @@ export default function QuestionResult({ questions, close }) {
             >
               {item.title}
             </h6>
-            <div>
-              <p
-                style={{
-                  fontSize: '12px',
-                }}
-              >
-                kok bisa sih belajar javascript semudah ini ??
-              </p>
-            </div>
           </div>
         ))
       )}

@@ -56,3 +56,8 @@ Satisfaction(bold)
 6.Sejauh mana Anda merasa perlu memiliki forum diskusi?
 7.Menurut Anda, sejauh mana forum diskusi nyaman untuk digunakan?
 8. Apakah Anda merasa sangat menyenangkan untuk digunakan?
+\
+
+
+query untuk menampilkan data nama user, questioner, dan score
+select u.name, q.questioner, ls.score from "Users" u join "LinkertScores" ls on ls.id_user = u.id join "Questioners" q on q.id = ls.id_questioner where u.id = 3
